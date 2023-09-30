@@ -1,0 +1,17 @@
+import psutil
+
+try:
+    p = psutil.process_iter()
+    stage = '0. Kill etl_bot process if exists'
+    print(stage)
+    procs = [p for p in psutil.process_iter()]
+    if procs:
+        for proc in procs:
+            if 'python3.11.exe' in proc.name() and 'Etl_Bot.py' in proc.cmdline()[-1]:
+                username = proc.username()[len("NICE_SYSTEMS") + 1:]
+                p = psutil.Process(proc.pid)
+                p.terminate()
+except Exception as e:
+    err = e._str_()
+    print('error in 0.stage:' + err)
+
